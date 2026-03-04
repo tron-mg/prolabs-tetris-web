@@ -1,0 +1,101 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: Inter, Arial, sans-serif;
+  min-height: 100vh;
+  color: #ecf8e8;
+  background: radial-gradient(circle at 20% 10%, #334520 0, #1c2712 45%, #13110f 100%);
+}
+
+.tetris-app {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 0.8rem;
+}
+
+.top h1 { margin: 0; font-size: clamp(1.4rem, 2.2vw, 2.1rem); }
+.top p { margin: .25rem 0 .9rem; color: #b7ceab; }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 300px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.board {
+  display: grid;
+  gap: 2px;
+  background: #0e1209;
+  border: 3px solid #6f8d3f;
+  border-radius: 12px;
+  padding: 6px;
+  width: min(100%, 90vh);
+  margin-inline: auto;
+}
+
+.board-small { max-width: 420px; }
+.board-medium { max-width: 540px; }
+.board-max { max-width: 680px; }
+
+.cell {
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #22311a, #182113);
+  border: 1px solid rgba(0,0,0,.35);
+}
+
+/* Minecraft + demons palette */
+.c1 { background: linear-gradient(180deg, #00c4c9, #017d80); }
+.c2 { background: linear-gradient(180deg, #f2d23a, #af8d10); }
+.c3 { background: linear-gradient(180deg, #ca68f2, #7f29a0); }
+.c4 { background: linear-gradient(180deg, #61e15a, #31862d); }
+.c5 { background: linear-gradient(180deg, #f45f5f, #9c2525); }
+.c6 { background: linear-gradient(180deg, #5c87ff, #2c4fb5); }
+.c7 { background: linear-gradient(180deg, #ff9f43, #b66412); }
+
+.panel {
+  display: grid;
+  gap: .6rem;
+  background: rgba(8, 12, 8, 0.65);
+  border: 1px solid #48612d;
+  border-radius: 12px;
+  padding: .8rem;
+}
+
+.card {
+  background: #1b2614;
+  border: 1px solid #3f5b26;
+  border-radius: 8px;
+  padding: .6rem;
+  display: grid;
+  gap: .35rem;
+}
+
+select, button {
+  width: 100%;
+  padding: .55rem .65rem;
+  border-radius: 8px;
+  border: 1px solid #4f6a31;
+  color: #ecf8e8;
+  background: #202d17;
+}
+
+button { cursor: pointer; font-weight: 700; }
+button:hover { background: #2b3b20; }
+
+.controls { font-size: .92rem; color: #c6d7bd; }
+.game-over {
+  text-align: center;
+  font-weight: 800;
+  color: #ff7676;
+  background: #2b1111;
+  border: 1px solid #a34141;
+  padding: .6rem;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .board { width: min(100%, 96vw); }
+}
