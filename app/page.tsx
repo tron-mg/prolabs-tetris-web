@@ -126,6 +126,9 @@ export default function Home() {
   const [gameOver, setGameOver] = useState(false);
   const [paused, setPaused] = useState(false);
 
+  const boardShellRef = useRef<HTMLDivElement>(null);
+  const [cellSize, setCellSize] = useState(24);
+
   const boardRef = useRef(board);
   const pieceRef = useRef(piece);
   const gameOverRef = useRef(gameOver);
@@ -137,6 +140,30 @@ export default function Home() {
     gameOverRef.current = gameOver;
     pausedRef.current = paused;
   }, [board, piece, gameOver, paused]);
+
+  useEffect(() => {
+    const shell = boardShellRef.current;
+    if (!shell) return;
+
+    const compute = () => {
+      const { clientWidth, clientHeight } = shell;
+      if (!clientWidth || !clientHeight) return;
+      const next = Math.floor(Math.min(clientWidth / width, clientHeight / height));
+      const clamped = Math.max(12, Math.min(next, 48));
+      setCellSize((prev) => (prev === clamped ? prev : clamped));
+    };
+
+    compute();
+
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(compute) : null;
+    observer?.observe(shell);
+    window.addEventListener("resize", compute);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", compute);
+    };
+  }, [width, height]);
 
   const resetGame = useCallback(() => {
     const b = createBoard(width, height);
@@ -232,6 +259,11 @@ export default function Home() {
     return view;
   }, [board, piece, height, width]);
 
+  const boardStyle = useMemo(() => ({
+    gridTemplateColumns: `repeat(${width}, ${cellSize}px)`,
+    gridAutoRows: `${cellSize}px`,
+  }), [width, cellSize]);
+
   return (
     <main className="tetris-app">
       <header className="top">
@@ -240,10 +272,14 @@ export default function Home() {
       </header>
 
       <section className="layout">
-        <div className={`board board-${sizeKey}`} style={{ gridTemplateColumns: `repeat(${width}, 1fr)` }}>
-          {display.flatMap((row, y) =>
-            row.map((c, x) => <div key={`${x}-${y}`} className={`cell c${c}`} />)
-          )}
+        <div className="play-area">
+          <div className="board-shell" ref={boardShellRef}>
+            <div className={`board board-${sizeKey}`} style={boardStyle}>
+              {display.flatMap((row, y) =>
+                row.map((c, x) => <div key={`${x}-${y}`} className={`cell c${c}`} />)
+              )}
+            </div>
+          </div>
         </div>
 
         <aside className="panel">
