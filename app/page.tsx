@@ -148,8 +148,14 @@ export default function Home() {
     const compute = () => {
       const { clientWidth, clientHeight } = shell;
       if (!clientWidth || !clientHeight) return;
-      const next = Math.floor(Math.min(clientWidth / width, clientHeight / height));
-      const clamped = Math.max(12, Math.min(next, 48));
+
+      const gap = 2;
+      const frame = 18; // board padding + border
+      const usableW = Math.max(0, clientWidth - frame - (width - 1) * gap);
+      const usableH = Math.max(0, clientHeight - frame - (height - 1) * gap);
+      const next = Math.floor(Math.min(usableW / width, usableH / height));
+      const clamped = Math.max(8, Math.min(next, 48));
+
       setCellSize((prev) => (prev === clamped ? prev : clamped));
     };
 
